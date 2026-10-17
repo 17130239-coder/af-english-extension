@@ -1,0 +1,855 @@
+/* ==========================================================================
+   af-english Extension Popup - Minimalist Precision Design
+   Inspired by Linear, Raycast, Readwise
+   Palette: High-end Neutral Zinc (#09090B, #121214, #18181B) + Warm Amber Accent (#F59E0B)
+   ========================================================================== */
+
+:root {
+  /* Surfaces */
+  --bg-canvas: #09090b;
+  --bg-surface: #121214;
+  --bg-surface-elevated: #18181b;
+  --bg-surface-subtle: #202024;
+  --bg-input: #18181b;
+  --bg-hover: #27272a;
+
+  /* Borders: Hairline & Transparent */
+  --border-default: rgba(255, 255, 255, 0.07);
+  --border-subtle: rgba(255, 255, 255, 0.05);
+  --border-highlight: rgba(255, 255, 255, 0.14);
+
+  /* Typography */
+  --text-primary: #f4f4f5;
+  --text-secondary: #a1a1aa;
+  --text-muted: #71717a;
+  --text-faint: #52525b;
+
+  /* Accent: Warm Apricot Amber */
+  --accent: #f59e0b;
+  --accent-hover: #ea580c;
+  --accent-dim: rgba(245, 158, 11, 0.09);
+  --accent-border: rgba(245, 158, 11, 0.22);
+
+  /* Status Colors */
+  --success: #10b981;
+  --danger: #ef4444;
+
+  /* Radii */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-pill: 9999px;
+
+  --transition-fast: 0.15s ease;
+}
+
+/* Base Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  width: 350px;
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-surface);
+  color: var(--text-secondary);
+  font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 13px;
+  line-height: 1.45;
+  user-select: none;
+  overflow-x: hidden;
+}
+
+/* Container: Borderless & flush against edge */
+.popup-wrap {
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--bg-surface);
+  border: none;
+  border-radius: 0;
+  margin: 0;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ==========================================================================
+   Header
+   ========================================================================== */
+.pop-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.pop-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pop-icon-box {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-default);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.pop-icon {
+  width: 15px;
+  height: 15px;
+  object-fit: contain;
+}
+
+.pop-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.015em;
+}
+
+.pop-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Minimalist Dashboard Text Link */
+.btn-dash-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  padding: 3px 6px;
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 11.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color var(--transition-fast);
+  outline: none;
+}
+
+.btn-dash-link:hover {
+  color: var(--text-primary);
+}
+
+/* ==========================================================================
+   Minimalist Switch Toggle (Reduced 15-20% for refined proportion)
+   ========================================================================== */
+.switch-toggle {
+  position: relative;
+  display: inline-block;
+  width: 26px;
+  height: 15px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.switch-toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.switch-slider {
+  position: absolute;
+  inset: 0;
+  background-color: var(--bg-surface-elevated);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-pill);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.switch-slider::after {
+  content: "";
+  position: absolute;
+  height: 11px;
+  width: 11px;
+  left: 1.5px;
+  top: 1px;
+  background-color: var(--text-muted);
+  border-radius: 50%;
+  transition: transform var(--transition-fast), background-color var(--transition-fast);
+}
+
+.switch-toggle input:checked + .switch-slider {
+  background-color: var(--accent);
+  border-color: var(--accent);
+}
+
+.switch-toggle input:checked + .switch-slider::after {
+  transform: translateX(12px);
+  background-color: #ffffff;
+}
+
+/* Sm size for footer details */
+.switch-toggle.sm {
+  width: 22px;
+  height: 13px;
+}
+
+.switch-toggle.sm .switch-slider::after {
+  height: 9px;
+  width: 9px;
+  left: 1.5px;
+  top: 1px;
+}
+
+.switch-toggle.sm input:checked + .switch-slider::after {
+  transform: translateX(10px);
+}
+
+/* ==========================================================================
+   Quick Add Input (Merged Inline Button Pattern)
+   ========================================================================== */
+.quick-add-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.quick-input {
+  width: 100%;
+  height: 34px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 12px;
+  padding: 0 66px 0 10px;
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.quick-input::placeholder {
+  color: var(--text-muted);
+}
+
+.quick-input:focus {
+  border-color: var(--border-highlight);
+  background: var(--bg-surface-elevated);
+}
+
+.btn-add-inline {
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 26px;
+  padding: 0 8px;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--accent);
+  font-family: inherit;
+  font-size: 11.5px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+  outline: none;
+}
+
+.btn-add-inline:hover {
+  background: var(--accent-dim);
+  color: #fbbf24;
+}
+
+.btn-add-inline:active {
+  transform: translateY(-50%) scale(0.96);
+}
+
+.btn-add-inline.added {
+  color: var(--success);
+}
+
+/* ==========================================================================
+   Shortcut Hints (Single Flat Text Line with Flat Kbd)
+   ========================================================================== */
+.shortcut-tip-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text-muted);
+  padding: 0 2px;
+}
+
+.tip-kbd {
+  font-family: ui-monospace, SFMono-Regular, monospace;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-default);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+.tip-label {
+  color: var(--text-muted);
+}
+
+.tip-dot {
+  color: var(--text-faint);
+  font-size: 10px;
+}
+
+/* ==========================================================================
+   Mode Selector: Flat Segmented Control
+   ========================================================================== */
+.mode-segment-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px 0;
+}
+
+.segment-label {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.segment-group {
+  display: inline-flex;
+  background: #18181b;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 2px;
+  gap: 2px;
+}
+
+.segment-opt {
+  cursor: pointer;
+  display: flex;
+}
+
+.segment-opt input[type="radio"] {
+  display: none;
+}
+
+.segment-btn {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-muted);
+  transition: all var(--transition-fast);
+  text-align: center;
+}
+
+.segment-btn:hover {
+  color: var(--text-secondary);
+}
+
+.segment-opt input[type="radio"]:checked + .segment-btn {
+  background: #27272a;
+  color: #f4f4f5;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   Recent History: Flat List (De-boxed)
+   ========================================================================== */
+.history-section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.history-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2px 2px 2px;
+}
+
+.history-heading {
+  font-size: 10.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+.btn-clear-text {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color var(--transition-fast);
+  outline: none;
+}
+
+.btn-clear-text:hover {
+  color: var(--danger);
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  max-height: 205px;
+  overflow-y: auto;
+  padding-right: 2px;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+}
+
+.history-list::-webkit-scrollbar {
+  width: 3px;
+  background: transparent;
+}
+
+.history-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.history-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+}
+
+.history-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.history-empty {
+  padding: 20px 10px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 11.5px;
+  line-height: 1.45;
+  border: 1px dashed var(--border-default);
+  border-radius: var(--radius-md);
+}
+
+.history-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 4px;
+  border-bottom: 1px solid var(--border-subtle);
+  transition: background-color var(--transition-fast);
+}
+
+.history-item:last-child {
+  border-bottom: none;
+}
+
+.history-text-box {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5px;
+  min-width: 0;
+  flex: 1;
+}
+
+.history-text {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.history-kp {
+  font-size: 11px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.history-kp b {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.history-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.history-time {
+  font-size: 10px;
+  color: var(--text-muted);
+  font-family: ui-monospace, SFMono-Regular, monospace;
+}
+
+.popup-timestamp-link {
+  font-size: 10px;
+  color: var(--text-muted);
+  font-family: ui-monospace, SFMono-Regular, monospace;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.popup-timestamp-link:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+/* Hover-only Action Icons with smooth fade & slide */
+.history-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+  opacity: 0;
+  transform: translateX(4px);
+  transition: opacity 0.18s cubic-bezier(0.16, 1, 0.3, 1), transform 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.history-item:hover .history-actions,
+.history-item:focus-within .history-actions {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+.btn-edit-item,
+.btn-copy-item,
+.btn-speak-item {
+  width: 22px;
+  height: 22px;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  outline: none;
+}
+
+.btn-edit-item:hover,
+.btn-copy-item:hover,
+.btn-speak-item:hover {
+  background: var(--bg-surface-elevated);
+  color: var(--text-primary);
+}
+
+.btn-copy-item.copied {
+  color: var(--success);
+}
+
+/* Inline Edit */
+.inline-edit-box {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.inline-edit-textarea {
+  width: 100%;
+  background: var(--bg-canvas);
+  border: 1px solid var(--border-highlight);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 12px;
+  padding: 5px 8px;
+  outline: none;
+  resize: none;
+}
+
+.inline-edit-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.btn-inline-cancel {
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-default);
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.btn-inline-save {
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   Collapsible Settings (Flat Clean Rows)
+   ========================================================================== */
+.pop-details {
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 6px;
+}
+
+.details-summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--text-muted);
+  transition: color var(--transition-fast);
+  user-select: none;
+  padding: 3px 2px;
+  outline: none;
+}
+
+.details-summary::-webkit-details-marker {
+  display: none;
+}
+
+.details-summary:hover {
+  color: var(--text-primary);
+}
+
+.summary-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.gear-icon {
+  color: var(--text-faint);
+}
+
+.chevron-icon {
+  transition: transform var(--transition-fast);
+  color: var(--text-faint);
+}
+
+.pop-details[open] .chevron-icon {
+  transform: rotate(180deg);
+}
+
+.details-body {
+  margin-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.check-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 2px;
+  font-size: 11.5px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.check-row:hover {
+  color: var(--text-primary);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-default);
+  border-radius: var(--radius-pill);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-highlight);
+}
+
+/* ==========================================================================
+   Active Media Card (Netflix & YouTube Live Detection)
+   ========================================================================== */
+.pop-media-card {
+  background: linear-gradient(135deg, rgba(24, 24, 27, 0.95), rgba(32, 32, 36, 0.95));
+  border: 1px solid var(--accent-border);
+  border-radius: var(--radius-md);
+  padding: 10px 11px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  animation: mediaCardFadeIn 0.2s ease-out;
+}
+
+@keyframes mediaCardFadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.media-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.media-badge-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.media-badge {
+  font-size: 9.5px;
+  font-weight: 700;
+  padding: 1.5px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.media-badge.yt {
+  background: rgba(239, 68, 68, 0.16);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.media-badge.nflx {
+  background: rgba(229, 9, 20, 0.16);
+  color: #ff333a;
+  border: 1px solid rgba(229, 9, 20, 0.3);
+}
+
+.media-status {
+  font-size: 10px;
+  color: var(--success);
+  font-weight: 500;
+}
+
+.media-track-pill {
+  font-size: 10px;
+  color: var(--text-muted);
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-default);
+  padding: 1.5px 6px;
+  border-radius: 9999px;
+  max-width: 110px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.media-title {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+
+.media-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-media-primary {
+  flex: 1;
+  height: 28px;
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  color: #121214;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: var(--radius-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  outline: none;
+}
+
+.btn-media-primary:hover {
+  background: #fbbf24;
+  border-color: #fbbf24;
+}
+
+.btn-media-primary:active {
+  transform: scale(0.97);
+}
+
+.media-dl-group {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.btn-dl-sub {
+  height: 28px;
+  padding: 0 6px;
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-family: ui-monospace, SFMono-Regular, monospace;
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  outline: none;
+}
+
+.btn-dl-sub:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-color: var(--border-highlight);
+}
+
+.btn-dl-sub:active {
+  transform: scale(0.95);
+}
+

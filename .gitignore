@@ -1,0 +1,15 @@
+.DS_Store
+Thumbs.db
+*.log
+.env
+.env.local
+.env.*.local
+node_modules/
+dist/
+build/
+.agents/
+skills-lock.json
+.neon
+
+
+

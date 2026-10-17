@@ -1,0 +1,119 @@
+{
+  "manifest_version": 3,
+  "name": "af-english",
+  "version": "1.1.0",
+  "description": "AF English - Tải phụ đề tiếng Anh và phân loại từ vựng (Danh từ, Động từ, Tính từ, Trạng từ) trên Netflix và YouTube để học tập dễ dàng.",
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    },
+    "default_title": "af-english"
+  },
+  "permissions": [
+    "storage",
+    "clipboardWrite",
+    "contextMenus",
+    "notifications",
+    "activeTab",
+    "scripting"
+  ],
+  "commands": {
+    "capture-current-subtitle": {
+      "suggested_key": {
+        "default": "Alt+C",
+        "mac": "Alt+C"
+      },
+      "description": "Lưu ngay phụ đề đang hiển thị (Option+C trên Mac, Alt+C trên Windows)"
+    },
+    "add-selected-text": {
+      "suggested_key": {
+        "default": "Alt+S",
+        "mac": "Alt+S"
+      },
+      "description": "Lưu đoạn văn bản đã chọn hoặc phụ đề (Option+S trên Mac, Alt+S trên Windows)"
+    },
+    "open-dashboard": {
+      "suggested_key": {
+        "default": "Alt+Shift+D",
+        "mac": "Alt+Shift+D"
+      },
+      "description": "Mở Dashboard AI học từ vựng (Option+Shift+D trên Mac)"
+    }
+  },
+  "host_permissions": [
+    "*://*.netflix.com/*",
+    "*://*.nflxvideo.net/*",
+    "*://*.nflxext.com/*",
+    "*://*.youtube.com/*",
+    "*://*.googlevideo.com/*",
+    "https://*.neon.tech/*",
+    "http://localhost:20128/*",
+    "http://127.0.0.1:20128/*",
+    "http://localhost/*",
+    "http://127.0.0.1/*",
+    "https://generativelanguage.googleapis.com/*",
+    "https://api.openai.com/*",
+    "https://translate.googleapis.com/*"
+  ],
+  "background": {
+    "service_worker": "background/background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.youtube.com/*"
+      ],
+      "js": [
+        "lib/constants.js",
+        "lib/utils.js",
+        "lib/subtitleParser.js",
+        "content/content.js"
+      ],
+      "css": [
+        "content/content.css"
+      ],
+      "run_at": "document_end",
+      "all_frames": false
+    },
+    {
+      "matches": [
+        "*://*.netflix.com/*"
+      ],
+      "js": [
+        "lib/constants.js",
+        "lib/utils.js",
+        "lib/subtitleParser.js",
+        "content/netflixContent.js"
+      ],
+      "css": [
+        "content/netflixContent.css"
+      ],
+      "run_at": "document_end",
+      "all_frames": false
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "content/netflixInjected.js",
+        "content/youtubeInjected.js",
+        "lib/compromise.js",
+        "icons/*"
+      ],
+      "matches": [
+        "*://*.netflix.com/*",
+        "*://*.youtube.com/*"
+      ]
+    }
+  ]
+}

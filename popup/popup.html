@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>af-english - Extension Popup</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-wrap">
+    <!-- Top Header -->
+    <header class="pop-header">
+      <div class="pop-brand">
+        <div class="pop-icon-box">
+          <img src="../icons/icon32.png" alt="Icon" class="pop-icon">
+        </div>
+        <span class="pop-title">af-english</span>
+      </div>
+
+      <div class="pop-header-actions">
+        <button id="btn-open-dashboard" class="btn-dash-link" title="Mở Dashboard học từ vựng">
+          <span>Dashboard</span>
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+        </button>
+
+        <!-- Master Toggle Switch -->
+        <label class="switch-toggle" title="Bật / Tắt tiện ích">
+          <input type="checkbox" id="toggle-enabled" checked>
+          <span class="switch-slider"></span>
+        </label>
+      </div>
+    </header>
+
+    <!-- Active Media Card (Live Netflix / YouTube Video) -->
+    <div id="media-card" class="pop-media-card" style="display: none;">
+      <div class="media-card-header">
+        <div class="media-badge-wrap">
+          <span id="media-badge" class="media-badge yt">YouTube</span>
+          <span id="media-status" class="media-status">Sẵn sàng</span>
+        </div>
+        <span id="media-track-name" class="media-track-pill">Tiếng Anh</span>
+      </div>
+      <div id="media-title" class="media-title">Đang kết nối...</div>
+      <div class="media-actions">
+        <button id="btn-media-split-vocab" class="btn-media-primary" title="Tách từ vựng theo Danh từ, Động từ, Tính từ, Trạng từ">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m13 2-2 2.5V8l5 2V8l2-2.5-5-3.5Z"/><path d="M12 2v20"/><path d="m17 14 5 3-5 3v-6Z"/></svg>
+          <span>Tách từ vựng (POS)</span>
+        </button>
+        <div class="media-dl-group">
+          <button id="btn-dl-srt" class="btn-dl-sub" title="Tải file phụ đề .SRT">.SRT</button>
+          <button id="btn-dl-vtt" class="btn-dl-sub" title="Tải file phụ đề .VTT">.VTT</button>
+          <button id="btn-dl-txt" class="btn-dl-sub" title="Tải transcript đọc .TXT">.TXT</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Add Input with Inline Add Button -->
+    <div class="quick-add-box">
+      <input type="text" id="input-quick-add" class="quick-input" placeholder="Thêm câu hoặc từ tiếng Anh..." autocomplete="off">
+      <button id="btn-quick-add" class="btn-add-inline" title="Thêm vào danh sách">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        <span>Thêm</span>
+      </button>
+    </div>
+
+    <!-- Shortcut Hints: Single Flat Row -->
+    <div class="shortcut-tip-row">
+      <kbd class="tip-kbd" id="kbd-capture">⌥C</kbd>
+      <span class="tip-label">Chụp phụ đề</span>
+      <span class="tip-dot">•</span>
+      <kbd class="tip-kbd" id="kbd-save">⌥S</kbd>
+      <span class="tip-label">Lưu bôi đen</span>
+    </div>
+
+    <!-- Mode Selector: Flat Segmented Control -->
+    <div class="mode-segment-bar">
+      <span class="segment-label">Chế độ copy</span>
+      <div class="segment-group">
+        <label class="segment-opt">
+          <input type="radio" name="copyMode" value="full" id="mode-full" checked>
+          <span class="segment-btn">Cả câu</span>
+        </label>
+        <label class="segment-opt">
+          <input type="radio" name="copyMode" value="segment" id="mode-segment">
+          <span class="segment-btn">Từ click</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Recent History List (Flat Borderless List) -->
+    <section class="history-section">
+      <div class="history-bar">
+        <span class="history-heading">Gần đây</span>
+        <button id="btn-clear-history" class="btn-clear-text">Xóa tất cả</button>
+      </div>
+
+      <div id="history-list" class="history-list">
+        <div class="history-empty">
+          <span>Chưa có câu nào. Click phụ đề trên YouTube để lưu!</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Collapsible Settings: Flat Clean List -->
+    <details class="pop-details">
+      <summary class="details-summary">
+        <div class="summary-left">
+          <svg class="gear-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          <span>Cài đặt tương tác</span>
+        </div>
+        <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </summary>
+      <div class="details-body">
+        <label class="check-row">
+          <span>Tự động pause video khi click</span>
+          <div class="switch-toggle sm">
+            <input type="checkbox" id="toggle-auto-pause">
+            <span class="switch-slider"></span>
+          </div>
+        </label>
+        <label class="check-row">
+          <span>Thông báo nổi (Toast) trên player</span>
+          <div class="switch-toggle sm">
+            <input type="checkbox" id="toggle-toast" checked>
+            <span class="switch-slider"></span>
+          </div>
+        </label>
+        <label class="check-row">
+          <span>Chớp sáng phụ đề khi click</span>
+          <div class="switch-toggle sm">
+            <input type="checkbox" id="toggle-highlight" checked>
+            <span class="switch-slider"></span>
+          </div>
+        </label>
+      </div>
+    </details>
+  </div>
+
+  <script src="../lib/constants.js"></script>
+  <script src="../lib/utils.js"></script>
+  <script src="../lib/neonClient.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

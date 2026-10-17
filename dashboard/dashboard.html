@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>af-english - Studio Tách Từ Vựng & Dịch Thuật Phụ Đề</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="dashboard.css">
+  <link rel="icon" type="image/png" href="../icons/icon32.png">
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Top Navigation Bar (Clean Minimalist Header with View Switcher) -->
+    <header class="top-nav">
+      <div class="nav-brand">
+        <div class="brand-icon-box">
+          <img src="../icons/icon32.png" alt="Logo" class="nav-logo">
+        </div>
+        <div class="brand-info">
+          <div class="brand-title-row">
+            <h1 class="brand-title">af-english</h1>
+          </div>
+        </div>
+      </div>
+
+      <!-- View Switcher (Vocab Studio vs Saved Subtitles) -->
+      <div class="view-switcher-bar">
+        <button id="view-tab-vocab-studio" class="view-switch-btn active" title="Studio Tách Từ Vựng Phim Netflix & Video YouTube">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
+            <line x1="7" y1="2" x2="7" y2="22"></line>
+            <line x1="17" y1="2" x2="17" y2="22"></line>
+            <line x1="2" y1="12" x2="22" y2="12"></line>
+            <line x1="2" y1="7" x2="7" y2="7"></line>
+            <line x1="2" y1="17" x2="7" y2="17"></line>
+            <line x1="17" y1="17" x2="22" y2="17"></line>
+            <line x1="17" y1="7" x2="22" y2="7"></line>
+          </svg>
+          <span>🎬 Subtitle & Vocab Studio</span>
+        </button>
+
+        <button id="view-tab-saved-list" class="view-switch-btn" title="Kho từ vựng đã lưu & Dịch AI">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+          </svg>
+          <span>📚 Từ Vựng Đã Lưu (Neon DB)</span>
+        </button>
+      </div>
+
+      <!-- Hidden Telemetry Anchor for backwards-compatible scripts -->
+      <div class="hidden">
+        <span id="stat-total">0</span>
+        <span id="stat-translated">0</span>
+        <span id="stat-favorite">0</span>
+        <div id="badge-neon"><span id="stat-neon-status">Neon DB</span></div>
+      </div>
+
+      <!-- Nav Actions (HyperUI Button Group) -->
+      <div class="nav-actions">
+        <button id="btn-add-manual" class="btn btn-primary" title="Thêm từ hoặc câu mới">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          <span>Thêm câu</span>
+        </button>
+        <button id="btn-translate-all" class="btn btn-secondary" title="Tự động dịch tất cả các câu chưa dịch">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></svg>
+          <span>Dịch tất cả</span>
+        </button>
+        <button id="btn-export" class="btn btn-secondary" title="Xuất dữ liệu học tập">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          <span>Xuất file</span>
+        </button>
+        <button id="btn-open-settings" class="btn btn-icon" title="Cài đặt mô hình AI & Dịch">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="main-content">
+
+      <!-- ========================================================= -->
+      <!-- VIEW 1: SUBTITLE & VOCABULARY STUDIO (Primary Feature)     -->
+      <!-- ========================================================= -->
+      <section id="view-vocab-studio" class="view-panel">
+        <!-- Active Media Source Detector Banner -->
+        <div id="vs-active-media-banner" class="vs-media-banner">
+          <div class="vs-media-info">
+            <div class="vs-platform-row">
+              <span class="vs-platform-tag" id="vs-platform-tag">🔴 YouTube / 🎬 Netflix</span>
+              <span class="vs-status-pill" id="vs-status-pill">Đang tìm video/phim...</span>
+            </div>
+            <h3 class="vs-media-title" id="vs-media-title">Chưa phát hiện phim/video đang mở</h3>
+            <p class="vs-media-desc" id="vs-media-desc">Mở một tập phim trên Netflix hoặc video YouTube có phụ đề tiếng Anh để bắt đầu học.</p>
+          </div>
+          <div class="vs-media-actions">
+            <button id="vs-btn-capture-active" class="btn btn-primary" disabled>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              <span>Tải phụ đề & Phân loại ngay</span>
+            </button>
+            <button id="vs-btn-toggle-upload" class="btn btn-secondary">
+              <span>📁 Tải file .SRT/.VTT hoặc Dán chữ</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Collapsible Upload / Paste Subtitle Box -->
+        <div id="vs-upload-box" class="vs-upload-box hidden">
+          <div class="vs-upload-tabs">
+            <button id="vs-tab-file" class="vs-tab-btn active">📁 Tải file .srt / .vtt</button>
+            <button id="vs-tab-paste" class="vs-tab-btn">📋 Dán chữ phụ đề</button>
+          </div>
+
+          <div id="vs-file-panel" class="vs-panel">
+            <div class="drop-zone" id="vs-drop-zone">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+              <span class="drop-title">Kéo & thả file .srt hoặc .vtt vào đây</span>
+              <span class="drop-subtitle">hoặc <label for="vs-file-input" class="browse-link">chọn file từ máy tính</label></span>
+              <input type="file" id="vs-file-input" accept=".srt,.vtt,.txt,.xml" style="display:none;">
+            </div>
+          </div>
+
+          <div id="vs-paste-panel" class="vs-panel hidden">
+            <textarea id="vs-paste-input" class="vs-textarea" placeholder="Dán nội dung phụ đề SRT hoặc WebVTT vào đây...&#10;Ví dụ:&#10;1&#10;00:00:10,000 --> 00:00:14,000&#10;The detective arrived at the scene."></textarea>
+            <div class="vs-paste-actions">
+              <input type="text" id="vs-paste-title" class="vs-input-title" placeholder="Tên tập phim / video (ví dụ: Sherlock Holmes S01E01)">
+              <button id="vs-btn-analyze-pasted" class="btn btn-primary">⚡ Phân loại từ vựng</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Loading Indicator -->
+        <div id="vs-loading" class="vs-loading-wrap hidden">
+          <div class="af-spinner"></div>
+          <span id="vs-loading-text">Đang phân loại từ vựng (Nouns, Verbs, Adj, Adv)...</span>
+        </div>
+
+        <!-- Vocab Studio Workspace (Visible once cues are analyzed) -->
+        <div id="vs-workspace" class="vs-workspace hidden">
+          <!-- Movie / Show Header & Subtitle Download Bar -->
+          <div class="vs-header-card">
+            <div class="vs-header-left">
+              <div class="vs-title-row">
+                <span class="vs-badge-source" id="vs-source-badge">Netflix</span>
+                <h2 class="vs-current-title" id="vs-current-title">Stranger Things S04E01</h2>
+              </div>
+              <div class="vs-meta-row">
+                <span class="vs-meta-pill" id="vs-cues-count">480 câu thoại</span>
+                <span class="vs-meta-pill" id="vs-total-words-count">4,200 từ</span>
+                <span class="vs-meta-pill highlight" id="vs-unique-words-count">650 từ vựng riêng biệt</span>
+              </div>
+            </div>
+
+            <div class="vs-header-right">
+              <span class="vs-dl-label">Tải phụ đề gốc:</span>
+              <div class="vs-dl-group">
+                <button id="vs-dl-srt" class="btn btn-secondary btn-sm" title="Tải file phụ đề SubRip (.SRT) tương thích mọi phần mềm VLC, PotPlayer">⬇ .SRT</button>
+                <button id="vs-dl-vtt" class="btn btn-secondary btn-sm" title="Tải file WebVTT (.VTT) chuẩn web">⬇ .VTT</button>
+                <button id="vs-dl-txt" class="btn btn-secondary btn-sm" title="Tải transcript đọc sách sạch không rác (.TXT)">⬇ .TXT</button>
+              </div>
+              <div class="vs-divider-v"></div>
+              <button id="vs-btn-anki" class="btn btn-anki btn-sm" title="Xuất toàn bộ bộ thẻ học Anki có nghĩa và ngữ cảnh phim">🗂️ Xuất Anki</button>
+              <button id="vs-btn-csv" class="btn btn-csv btn-sm" title="Xuất file Excel / CSV đầy đủ loại từ và câu ví dụ">📊 Xuất CSV</button>
+              <button id="vs-btn-save-neon" class="btn btn-primary btn-sm" title="Đồng bộ danh sách từ vựng này lên Neon Cloud Postgres">🐘 Lưu vào Neon DB</button>
+            </div>
+          </div>
+
+          <!-- 4 POS Stat Badges -->
+          <div class="vs-pos-summary-bar">
+            <div class="vs-pos-stat-card card-noun" data-target-pos="noun" title="Xem tất cả danh từ">
+              <div class="vs-stat-icon">📘</div>
+              <div class="vs-stat-content">
+                <span class="vs-stat-label">Danh từ (Nouns)</span>
+                <span class="vs-stat-num" id="vs-count-nouns">0</span>
+              </div>
+            </div>
+
+            <div class="vs-pos-stat-card card-verb" data-target-pos="verb" title="Xem tất cả động từ">
+              <div class="vs-stat-icon">📙</div>
+              <div class="vs-stat-content">
+                <span class="vs-stat-label">Động từ (Verbs)</span>
+                <span class="vs-stat-num" id="vs-count-verbs">0</span>
+              </div>
+            </div>
+
+            <div class="vs-pos-stat-card card-adj" data-target-pos="adjective" title="Xem tất cả tính từ">
+              <div class="vs-stat-icon">📗</div>
+              <div class="vs-stat-content">
+                <span class="vs-stat-label">Tính từ (Adjectives)</span>
+                <span class="vs-stat-num" id="vs-count-adjs">0</span>
+              </div>
+            </div>
+
+            <div class="vs-pos-stat-card card-adv" data-target-pos="adverb" title="Xem tất cả trạng từ">
+              <div class="vs-stat-icon">📕</div>
+              <div class="vs-stat-content">
+                <span class="vs-stat-label">Trạng từ (Adverbs)</span>
+                <span class="vs-stat-num" id="vs-count-advs">0</span>
+              </div>
+            </div>
+
+            <div class="vs-pos-stat-card card-flashcard" data-target-pos="flashcards" title="Chuyển sang chế độ lật thẻ Flashcard">
+              <div class="vs-stat-icon">🎴</div>
+              <div class="vs-stat-content">
+                <span class="vs-stat-label">Thẻ Flashcard</span>
+                <span class="vs-stat-num">Luyện tập</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Filters & Search Toolbar -->
+          <div class="vs-filter-toolbar">
+            <div class="vs-filter-tabs">
+              <button class="vs-tab active" data-pos="all">Tất cả <span id="vs-tab-badge-all" class="vs-tab-num">0</span></button>
+              <button class="vs-tab" data-pos="noun">📘 Danh từ <span id="vs-tab-badge-noun" class="vs-tab-num">0</span></button>
+              <button class="vs-tab" data-pos="verb">📙 Động từ <span id="vs-tab-badge-verb" class="vs-tab-num">0</span></button>
+              <button class="vs-tab" data-pos="adjective">📗 Tính từ <span id="vs-tab-badge-adj" class="vs-tab-num">0</span></button>
+              <button class="vs-tab" data-pos="adverb">📕 Trạng từ <span id="vs-tab-badge-adv" class="vs-tab-num">0</span></button>
+              <button class="vs-tab" data-pos="flashcards">🎴 Flashcard</button>
+            </div>
+
+            <div class="vs-filter-right">
+              <div class="search-box">
+                <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" id="vs-search-input" placeholder="Tìm kiếm từ vựng, phiên âm, hoặc nghĩa...">
+                <button id="vs-btn-clear-search" class="btn-clear-search">&times;</button>
+              </div>
+
+              <select id="vs-select-cefr" class="select-dropdown">
+                <option value="all">Tất cả cấp độ CEFR</option>
+                <option value="basic">A1 - A2 (Cơ bản)</option>
+                <option value="intermediate">B1 - B2 (Trung cấp)</option>
+                <option value="advanced">C1 - C2 (Nâng cao)</option>
+              </select>
+
+              <select id="vs-select-freq" class="select-dropdown">
+                <option value="1">Tất cả tần suất</option>
+                <option value="2">Xuất hiện ≥ 2 lần</option>
+                <option value="3">Xuất hiện ≥ 3 lần</option>
+                <option value="5">Xuất hiện ≥ 5 lần</option>
+              </select>
+
+              <select id="vs-select-sort" class="select-dropdown">
+                <option value="freq">Tần suất cao nhất</option>
+                <option value="az">A → Z</option>
+                <option value="timeline">Thứ tự xuất hiện</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Words Grid Container -->
+          <div id="vs-words-container" class="vs-words-grid"></div>
+
+          <!-- Flashcard Mode Container -->
+          <div id="vs-flashcard-container" class="vs-flashcard-wrap hidden">
+            <div class="flashcard-box" id="vs-flashcard">
+              <div class="card-inner" id="vs-card-inner">
+                <!-- Front Side -->
+                <div class="card-front">
+                  <span class="card-hint">Nhấp chuột hoặc phím Space để lật thẻ</span>
+                  <div class="card-front-content">
+                    <span class="card-pos-badge" id="fc-pos-badge">DANH TỪ</span>
+                    <h2 class="card-word" id="fc-word">detective</h2>
+                    <span class="card-ipa" id="fc-ipa">/dɪˈtektɪv/</span>
+                    <button class="card-speak-btn" id="fc-btn-speak">🔊 Nghe phát âm</button>
+                  </div>
+                  <span class="card-footer-tip">Bấm Space để xem nghĩa tiếng Việt & ngữ cảnh</span>
+                </div>
+
+                <!-- Back Side -->
+                <div class="card-back">
+                  <span class="card-hint">Mặt sau</span>
+                  <div class="card-back-content">
+                    <h3 class="card-trans" id="fc-trans">thám tử, trinh thám</h3>
+                    <div class="card-cefr-badge" id="fc-cefr">CEFR B1</div>
+                    <div class="card-context-box" id="fc-context-box">
+                      <span class="card-context-label">Ngữ cảnh câu thoại trong tập phim:</span>
+                      <p class="card-sentence" id="fc-sentence">"The brilliant detective was investigating a murder."</p>
+                      <span class="card-time" id="fc-time">▶ 00:01:23</span>
+                    </div>
+                  </div>
+                  <div class="card-actions">
+                    <button id="fc-btn-again" class="btn btn-secondary">Chưa thuộc (Xem lại)</button>
+                    <button id="fc-btn-good" class="btn btn-primary">Đã thuộc ✓</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="flashcard-controls">
+              <button id="fc-btn-prev" class="btn btn-icon" title="Thẻ trước (Phím ←)">◀</button>
+              <span id="fc-progress-text" class="fc-counter">Thẻ 1 / 50</span>
+              <button id="fc-btn-next" class="btn btn-icon" title="Thẻ tiếp theo (Phím →)">▶</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================= -->
+      <!-- VIEW 2: SAVED SUBTITLES & AI TRANSLATIONS (Existing View) -->
+      <!-- ========================================================= -->
+      <section id="view-saved-subtitles" class="view-panel hidden">
+        <!-- Search & Filter Controls -->
+        <section class="filter-bar">
+          <div class="filter-tabs">
+            <button class="tab-btn active" data-filter="all">Tất cả <span id="count-all" class="tab-badge">0</span></button>
+            <button class="tab-btn" data-filter="pending">Chưa dịch <span id="count-pending" class="tab-badge">0</span></button>
+            <button class="tab-btn" data-filter="translated">Đã dịch <span id="count-translated" class="tab-badge">0</span></button>
+            <button class="tab-btn" data-filter="favorite">Yêu thích <span id="count-fav" class="tab-badge">0</span></button>
+          </div>
+
+          <div class="filter-controls-right">
+            <div class="search-box">
+              <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <input type="text" id="search-input" placeholder="Tìm kiếm từ tiếng Anh, tiếng Việt, hoặc video...">
+              <button id="btn-clear-search" class="btn-clear-search" title="Xóa tìm kiếm">&times;</button>
+            </div>
+
+            <div class="sort-box">
+              <select id="select-video-filter" class="select-dropdown">
+                <option value="all">Tất cả video nguồn</option>
+              </select>
+
+              <select id="select-sort" class="select-dropdown">
+                <option value="newest">Mới nhất</option>
+                <option value="oldest">Cũ nhất</option>
+                <option value="az">A → Z</option>
+              </select>
+            </div>
+          </div>
+        </section>
+
+        <!-- Batch Progress Bar (HyperUI Progress Component) -->
+        <div id="batch-progress" class="batch-progress-container hidden">
+          <div class="batch-progress-header">
+            <span id="batch-progress-text">Đang dịch với AI... (0/0)</span>
+            <button id="btn-cancel-batch" class="btn-text">Dừng</button>
+          </div>
+          <div class="progress-bar-bg">
+            <div id="batch-progress-fill" class="progress-bar-fill" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <!-- Batch Selection Action Bar (HyperUI Sticky Action Bar) -->
+        <div id="selection-action-bar" class="selection-action-bar hidden">
+          <div class="selection-info">
+            <label class="select-all-wrap" title="Chọn / Bỏ chọn tất cả thẻ đang hiển thị">
+              <input type="checkbox" id="checkbox-select-all" class="card-checkbox">
+              <span class="selection-count-text">Đã chọn: <b id="selected-count">0</b> thẻ</span>
+            </label>
+          </div>
+          <div class="selection-actions">
+            <button id="btn-batch-translate" class="btn btn-secondary btn-sm" title="Dịch song song các thẻ đã chọn bằng AI">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></svg>
+              <span>Dịch đã chọn (Song song)</span>
+            </button>
+            <button id="btn-batch-favorite" class="btn btn-secondary btn-sm" title="Đánh dấu yêu thích các thẻ đã chọn">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <span>Yêu thích</span>
+            </button>
+            <button id="btn-batch-delete" class="btn btn-danger btn-sm" title="Xóa vĩnh viễn các thẻ đã chọn">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+              <span>Xóa</span>
+            </button>
+            <button id="btn-batch-cancel" class="btn btn-text btn-sm" title="Bỏ chọn">Hủy</button>
+          </div>
+        </div>
+
+        <!-- Cards Grid Container -->
+        <div id="cards-grid" class="cards-grid">
+          <!-- Subtitle cards will be dynamically rendered here -->
+        </div>
+
+        <!-- Empty State Component -->
+        <div id="empty-state" class="empty-state hidden">
+          <div class="empty-icon-wrap">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="15" x="2" y="7" rx="2" ry="2"/><polyline points="17 2 12 7 7 2"/></svg>
+          </div>
+          <h3 class="empty-title">Chưa có phụ đề nào được lưu</h3>
+          <p class="empty-desc">
+            Khi xem video trên YouTube hoặc Netflix, hãy bấm phím tắt <code id="dash-kbd-c">⌥ Option + C</code> để lưu ngay phụ đề đang phát, hoặc dùng nút <code id="dash-kbd-s">AF Phụ đề & Từ vựng</code>.
+          </p>
+          <button id="btn-open-youtube" class="btn btn-primary">Mở YouTube ngay</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modal: AI Settings -->
+  <div id="modal-settings" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title-box">
+          <div class="modal-icon-badge">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+          </div>
+          <div>
+            <h2>Cài đặt AI & Dịch thuật</h2>
+            <p class="modal-subtitle">Tùy chỉnh mô hình ngôn ngữ và cấu hình Gateway</p>
+          </div>
+        </div>
+        <button id="btn-close-settings" class="modal-close-btn">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-group">
+          <div class="provider-card" style="border-color: rgba(249, 115, 22, 0.35); background: rgba(249, 115, 22, 0.05);">
+            <div class="provider-header">
+              <span class="provider-name">9Router AI Gateway (Khuyên dùng)</span>
+              <span class="provider-badge" style="background:#f97316;color:#fff;">Mặc định</span>
+            </div>
+            <div class="form-field">
+              <label>API Base URL</label>
+              <input type="text" id="setting-nine-router-url" class="form-input" placeholder="http://localhost:20128/v1">
+            </div>
+            <div class="form-field">
+              <label>API Key</label>
+              <input type="password" id="setting-nine-router-key" class="form-input" placeholder="sk-...">
+            </div>
+            <div class="form-field">
+              <label>Model</label>
+              <input type="text" id="setting-nine-router-model" class="form-input" placeholder="ag/gemini-3.8-flash-low">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Độ trễ và số luồng dịch song song</label>
+          <input type="number" id="setting-concurrency" class="form-input" min="1" max="8" value="4">
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button id="btn-test-ai" class="btn btn-secondary">⚡ Kiểm tra kết nối</button>
+        <button id="btn-save-settings" class="btn btn-primary">Lưu cài đặt</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Add Manual Subtitle -->
+  <div id="modal-add-manual" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title-box">
+          <h2>Thêm từ vựng hoặc câu tiếng Anh</h2>
+        </div>
+        <button id="btn-close-add-manual" class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-field">
+          <label>Câu hoặc từ tiếng Anh *</label>
+          <textarea id="manual-text" class="form-input" rows="3" placeholder="Nhập câu tiếng Anh..."></textarea>
+        </div>
+        <div class="form-field">
+          <label>Nguồn / Tên video</label>
+          <input type="text" id="manual-video-title" class="form-input" placeholder="Nhập tên video hoặc để trống">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="btn-save-manual" class="btn btn-primary">Thêm ngay</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Edit Subtitle -->
+  <div id="modal-edit" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2>Chỉnh sửa từ vựng</h2>
+        <button id="btn-close-edit" class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="edit-id">
+        <div class="form-field">
+          <label>Câu tiếng Anh</label>
+          <textarea id="edit-text" class="form-input" rows="2"></textarea>
+        </div>
+        <div class="form-field">
+          <label>Bản dịch tiếng Việt</label>
+          <textarea id="edit-translation" class="form-input" rows="2"></textarea>
+        </div>
+        <div class="form-field">
+          <label>Giải thích</label>
+          <textarea id="edit-explanation" class="form-input" rows="2"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="btn-save-edit" class="btn btn-primary">Lưu thay đổi</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Export Data -->
+  <div id="modal-export" class="modal-overlay hidden">
+    <div class="modal-card modal-small">
+      <div class="modal-header">
+        <h2>Xuất dữ liệu học tập</h2>
+        <button id="btn-close-export" class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body export-options">
+        <button id="btn-export-json" class="export-option-card">
+          <div class="export-info">
+            <span class="export-name">Sao lưu JSON (.json)</span>
+            <span class="export-desc">Lưu toàn bộ dữ liệu cấu trúc gốc để sao lưu hoặc chuyển đổi.</span>
+          </div>
+        </button>
+        <button id="btn-export-anki-legacy" class="export-option-card">
+          <div class="export-info">
+            <span class="export-name">Bộ thẻ Anki (.txt)</span>
+            <span class="export-desc">Import 1 cú click vào Anki để học ngắt quãng Spaced Repetition.</span>
+          </div>
+        </button>
+      </div>
+      <div class="modal-footer">
+        <button id="btn-close-export-footer" class="btn btn-secondary">Đóng</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification for Dashboard -->
+  <div id="dash-toast" class="dash-toast hidden"></div>
+
+  <!-- Script Imports -->
+  <script src="../lib/constants.js"></script>
+  <script src="../lib/utils.js"></script>
+  <script src="../lib/subtitleParser.js"></script>
+  <script src="../lib/compromise.js"></script>
+  <script src="../lib/cefrDict.js"></script>
+  <script src="../lib/vocabAnalyzer.js"></script>
+  <script src="../lib/neonClient.js"></script>
+  <script src="../lib/aiService.js"></script>
+  <script src="dashboard.js"></script>
+</body>
+</html>

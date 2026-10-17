@@ -1,0 +1,655 @@
+/* YouTube Subtitle Click & Copy - Content Styles (iOS 18 Minimalist) */
+
+/* 1. Kích hoạt con trỏ chuột và cho phép bôi đen (select) chữ trên toàn bộ phụ đề */
+body:not(.yt-sub-copy-disabled) .ytp-caption-window-container,
+body:not(.yt-sub-copy-disabled) .caption-window,
+body:not(.yt-sub-copy-disabled) .caption-window *,
+body:not(.yt-sub-copy-disabled) .ytp-caption-window-bottom,
+body:not(.yt-sub-copy-disabled) .ytp-caption-window-rollup,
+body:not(.yt-sub-copy-disabled) .caption-visual-line,
+body:not(.yt-sub-copy-disabled) .captions-text,
+body:not(.yt-sub-copy-disabled) .ytp-caption-segment {
+  pointer-events: auto !important;
+  user-select: text !important;
+  -webkit-user-select: text !important;
+}
+
+body:not(.yt-sub-copy-disabled) .ytp-caption-segment {
+  cursor: text !important;
+}
+
+/* Hiển thị highlight màu hổ phách ấm áp khi người dùng bôi đen chữ */
+body:not(.yt-sub-copy-disabled) .caption-window ::selection,
+body:not(.yt-sub-copy-disabled) .ytp-caption-segment::selection,
+body:not(.yt-sub-copy-disabled) .captions-text::selection {
+  background-color: #f97316 !important;
+  color: #ffffff !important;
+}
+
+/* 2. Hiệu ứng rê chuột nhẹ nhàng (Clean Subtitle Hover state) */
+body:not(.yt-sub-copy-disabled) .ytp-caption-segment {
+  transition: background-color 0.15s ease, box-shadow 0.15s ease !important;
+}
+
+body:not(.yt-sub-copy-disabled) .ytp-caption-segment:hover {
+  background-color: rgba(255, 255, 255, 0.22) !important;
+  border-radius: 4px !important;
+  box-shadow: 0 0 0 1.5px rgba(249, 115, 22, 0.75) !important;
+}
+
+/* 3. Hiệu ứng chớp sáng khi click */
+.yt-sub-copy-flash {
+  animation: yt-sub-copy-pulse 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+@keyframes yt-sub-copy-pulse {
+  0% {
+    background-color: rgba(249, 115, 22, 0.95) !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 12px rgba(249, 115, 22, 0.6) !important;
+  }
+  50% {
+    background-color: rgba(234, 88, 12, 0.8) !important;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* 4. Thông báo Toast nổi trên video player (HyperUI Minimal Floating Toast) */
+.yt-sub-copy-toast-container {
+  position: absolute;
+  top: 64px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-10px);
+  z-index: 2147483647;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  background: rgba(15, 16, 19, 0.95);
+  color: #f8fafc;
+  border: 1px solid #282932;
+  border-radius: 9999px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.65);
+  font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 12.5px;
+  font-weight: 500;
+  line-height: 1.4;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  max-width: 82%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.yt-sub-copy-toast-container.yt-sub-toast-visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.yt-sub-copy-toast-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(249, 115, 22, 0.15);
+  color: #f97316;
+  flex-shrink: 0;
+}
+
+.yt-sub-copy-toast-content {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.yt-sub-copy-toast-label {
+  color: #f97316;
+  font-weight: 600;
+}
+
+.yt-sub-copy-toast-preview {
+  color: #cbd5e1;
+  font-weight: 400;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.yt-sub-copy-toast-btn-dash {
+  pointer-events: auto !important;
+  background: #1c1d23;
+  border: 1px solid #282932;
+  border-radius: 9999px;
+  color: #f8fafc;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 10px;
+  margin-left: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.yt-sub-copy-toast-btn-dash:hover {
+  background: #f97316;
+  border-color: #f97316;
+  color: #ffffff;
+}
+
+/* Floating Action Button for Subtitle Download & Vocab Analysis */
+#af-youtube-widget {
+  position: fixed;
+  bottom: 84px;
+  right: 24px;
+  z-index: 2147483640;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  user-select: none;
+}
+
+.af-widget-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(18, 18, 22, 0.94);
+  color: #f8fafc;
+  padding: 10px 18px;
+  border-radius: 9999px;
+  border: 1px solid rgba(249, 115, 22, 0.4);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 15px rgba(249, 115, 22, 0.25);
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(12px);
+  outline: none;
+}
+
+.af-widget-pill:hover {
+  background: rgba(28, 28, 34, 0.98);
+  border-color: #f97316;
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.8), 0 0 22px rgba(249, 115, 22, 0.4);
+}
+
+.af-widget-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #f97316;
+}
+
+.af-widget-title {
+  font-size: 13.5px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+}
+
+.af-widget-status-badge {
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.af-widget-status-badge.af-badge-active {
+  background: rgba(249, 115, 22, 0.2);
+  color: #fb923c;
+  border: 1px solid rgba(249, 115, 22, 0.4);
+}
+
+/* Modal Backdrop */
+.af-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.78);
+  backdrop-filter: blur(8px);
+  z-index: 2147483647;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  animation: afFadeIn 0.2s ease-out;
+  box-sizing: border-box;
+}
+
+@keyframes afFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Modal Card */
+.af-modal-card {
+  width: 100%;
+  max-width: 900px;
+  max-height: 88vh;
+  background: #111216;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 30px rgba(249, 115, 22, 0.15);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: #f1f5f9;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Modal Header */
+.af-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: #16181e;
+}
+
+.af-modal-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.af-modal-tag {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #f97316;
+  letter-spacing: 0.5px;
+}
+
+.af-modal-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.3;
+}
+
+.af-modal-close {
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  color: #94a3b8;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.af-modal-close:hover {
+  background: rgba(239, 68, 68, 0.25);
+  color: #ef4444;
+}
+
+/* Modal Body */
+.af-modal-body {
+  padding: 20px 24px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.af-track-selector-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.af-field-label {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #94a3b8;
+  white-space: nowrap;
+}
+
+.af-select {
+  flex: 1;
+  background: #1c1e24;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #f8fafc;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  outline: none;
+  cursor: pointer;
+}
+
+.af-actions-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.af-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 15px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  outline: none;
+  white-space: nowrap;
+}
+
+.af-btn-primary {
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(249, 115, 22, 0.35);
+}
+
+.af-btn-primary:hover {
+  background: linear-gradient(135deg, #fb923c 0%, #f97316 100%);
+  transform: translateY(-1px);
+}
+
+.af-btn-secondary {
+  background: rgba(255, 255, 255, 0.08);
+  color: #f1f5f9;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.af-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.af-download-btn-group {
+  display: flex;
+  gap: 6px;
+}
+
+.af-btn-outline {
+  background: transparent;
+  color: #cbd5e1;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  font-size: 12px;
+  padding: 8px 12px;
+}
+
+.af-btn-outline:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: #f97316;
+  color: #fb923c;
+}
+
+.af-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.af-loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  gap: 14px;
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+.af-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(249, 115, 22, 0.2);
+  border-top-color: #f97316;
+  border-radius: 50%;
+  animation: afSpin 0.7s linear infinite;
+}
+
+@keyframes afSpin {
+  to { transform: rotate(360deg); }
+}
+
+.af-pos-tabs {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.af-pos-tab {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid transparent;
+  color: #94a3b8;
+  padding: 7px 13px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.af-pos-tab:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #f8fafc;
+}
+
+.af-pos-tab.active {
+  background: rgba(249, 115, 22, 0.18);
+  color: #fb923c;
+  border-color: rgba(249, 115, 22, 0.4);
+}
+
+.af-search-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.af-search-bar input {
+  flex: 1;
+  background: #181a20;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 8px 14px;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 13px;
+  outline: none;
+}
+
+.af-search-bar input:focus {
+  border-color: #f97316;
+}
+
+.af-btn-sm {
+  padding: 7px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 7px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+}
+
+.af-btn-anki {
+  background: #0284c7;
+  color: #fff;
+}
+.af-btn-anki:hover { background: #0369a1; }
+
+.af-btn-csv {
+  background: #16a34a;
+  color: #fff;
+}
+.af-btn-csv:hover { background: #15803d; }
+
+.af-words-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+  max-height: 480px;
+  overflow-y: auto;
+  padding: 4px 2px 12px;
+}
+
+.af-word-card {
+  background: #181a20;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.af-word-card:hover {
+  border-color: rgba(249, 115, 22, 0.4);
+  transform: translateY(-2px);
+}
+
+.af-word-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.af-word-title-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.af-word-text {
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.af-word-ipa {
+  font-size: 11.5px;
+  color: #94a3b8;
+  font-style: italic;
+}
+
+.af-btn-speak {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  padding: 2px 4px;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+.af-btn-speak:hover { opacity: 1; transform: scale(1.1); }
+
+.af-word-badges {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.af-badge-pos {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.af-badge-noun { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+.af-badge-verb { background: rgba(249, 115, 22, 0.2); color: #fb923c; }
+.af-badge-adjective { background: rgba(34, 197, 94, 0.2); color: #4ade80; }
+.af-badge-adverb { background: rgba(236, 72, 153, 0.2); color: #f472b6; }
+
+.af-badge-cefr {
+  font-size: 9.5px;
+  font-weight: 700;
+  padding: 2px 5px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #e2e8f0;
+}
+
+.af-badge-freq {
+  font-size: 10px;
+  font-weight: 600;
+  color: #94a3b8;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 2px 5px;
+  border-radius: 3px;
+}
+
+.af-word-trans {
+  font-size: 13px;
+  color: #fb923c;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.af-word-context {
+  background: rgba(0, 0, 0, 0.28);
+  border-left: 2px solid #f97316;
+  padding: 6px 10px;
+  border-radius: 0 6px 6px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.af-context-text {
+  font-size: 11.5px;
+  color: #cbd5e1;
+  font-style: italic;
+  line-height: 1.35;
+}
+
+.af-hl-word {
+  color: #fb923c;
+  font-weight: 700;
+}
+
+.af-btn-seek {
+  align-self: flex-start;
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  color: #94a3b8;
+  font-size: 10.5px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.af-btn-seek:hover {
+  background: #f97316;
+  color: #fff;
+}
+
+.af-empty-vocab {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 40px;
+  color: #64748b;
+  font-size: 14px;
+}

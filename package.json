@@ -1,0 +1,15 @@
+{
+  "name": "af-english",
+  "version": "1.0.0",
+  "description": "AF English - Trợ lý học từ vựng tiếng Anh qua phụ đề YouTube & Duyệt web",
+  "scripts": {
+    "test": "node test/fullVerification.js",
+    "check-syntax": "node -c lib/subtitleParser.js && node -c lib/cefrDict.js && node -c lib/vocabAnalyzer.js && node -c background/background.js && node -c content/netflixInjected.js && node -c content/netflixContent.js && node -c content/youtubeInjected.js && node -c content/content.js && node -c popup/popup.js && node -c dashboard/dashboard.js"
+  },
+  "dependencies": {
+    "@neon/config": "^1.8.5",
+    "@neon/env": "^1.5.2",
+    "@neondatabase/serverless": "^1.2.0",
+    "compromise": "^14.18.0"
+  }
+}
