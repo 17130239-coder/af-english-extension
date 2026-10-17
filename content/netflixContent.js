@@ -91,44 +91,16 @@
   let modalContainer = null;
 
   function createWidget() {
-    if (widgetContainer) return;
-
-    widgetContainer = document.createElement('div');
-    widgetContainer.id = 'af-netflix-widget';
-    widgetContainer.className = 'af-netflix-widget-collapsed';
-    widgetContainer.innerHTML = `
-      <button class="af-widget-pill" title="AF English - Tải phụ đề & Tách từ vựng">
-        <span class="af-widget-icon">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-            <polyline points="7 10 12 15 17 10"></polyline>
-            <line x1="12" y1="15" x2="12" y2="3"></line>
-          </svg>
-        </span>
-        <span class="af-widget-title">AF Phụ đề & Từ vựng</span>
-        <span class="af-widget-status-badge" id="af-widget-badge">Đang tìm...</span>
-      </button>
-    `;
-
-    document.body.appendChild(widgetContainer);
-
-    widgetContainer.querySelector('.af-widget-pill').addEventListener('click', () => {
-      openVocabModal();
-    });
+    try {
+      document.getElementById('af-netflix-widget')?.remove();
+      document.getElementById('af-modal-backdrop')?.remove();
+    } catch (e) {}
   }
 
   function updateWidgetUI() {
-    if (!widgetContainer) createWidget();
-    const badge = document.getElementById('af-widget-badge');
-    if (!badge) return;
-
-    if (currentMovieData.selectedTrack) {
-      badge.textContent = currentMovieData.selectedTrack.label || 'English';
-      badge.classList.add('af-badge-active');
-    } else {
-      badge.textContent = 'Bật phụ đề';
-      badge.classList.remove('af-badge-active');
-    }
+    try {
+      document.getElementById('af-netflix-widget')?.remove();
+    } catch (e) {}
   }
 
   /**

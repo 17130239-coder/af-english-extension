@@ -636,41 +636,16 @@
     },
 
     createWidget() {
-      if (this.widgetEl) return;
-      this.widgetEl = document.createElement('div');
-      this.widgetEl.id = 'af-youtube-widget';
-      this.widgetEl.innerHTML = `
-        <button class="af-widget-pill" title="AF English - Tải phụ đề & Tách từ vựng">
-          <span class="af-widget-icon">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-              <polyline points="7 10 12 15 17 10"></polyline>
-              <line x1="12" y1="15" x2="12" y2="3"></line>
-            </svg>
-          </span>
-          <span class="af-widget-title">AF Phụ đề & Từ vựng</span>
-          <span class="af-widget-status-badge" id="af-yt-widget-badge">Đang tìm...</span>
-        </button>
-      `;
-
-      document.body.appendChild(this.widgetEl);
-
-      this.widgetEl.querySelector('.af-widget-pill').addEventListener('click', () => {
-        this.openModal();
-      });
+      try {
+        document.getElementById('af-youtube-widget')?.remove();
+        document.getElementById('af-modal-backdrop')?.remove();
+      } catch (e) {}
     },
 
     updateWidget() {
-      if (!this.widgetEl) this.createWidget();
-      const badge = document.getElementById('af-yt-widget-badge');
-      if (!badge) return;
-      if (this.selectedTrack) {
-        badge.textContent = this.selectedTrack.label || 'English';
-        badge.classList.add('af-badge-active');
-      } else {
-        badge.textContent = 'Bật CC';
-        badge.classList.remove('af-badge-active');
-      }
+      try {
+        document.getElementById('af-youtube-widget')?.remove();
+      } catch (e) {}
     },
 
     getTitle() {
